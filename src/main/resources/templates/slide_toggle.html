@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ready</title>
+    <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        // 调用滑动开关方法
+        $(document).ready(function () {
+            $('.btn').click(function () {
+                $('p').slideToggle('slow');
+            })
+        })
+    </script>
+</head>
+<body>
+<p>paragraph</p>
+<input type="button" value="toggle" class="btn"/>
+</body>
+</html>

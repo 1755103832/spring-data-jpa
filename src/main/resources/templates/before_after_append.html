@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                $("img").before("<img src=\"../static/images/my.jpg\" alt=\"my image\" style=\"width: 100px;height: 100px;\"/>");
+            })
+            $("#btn2").click(function () {
+                $("img").after("<ins>after</ins>");
+            })
+        })
+    </script>
+</head>
+<body>
+<button id="btn1">click me</button>
+<button id="btn2">click me</button>
+<br/>
+<img src="../static/images/wallpaper.png" alt="wallpaper image" style="width: 100px;height: 100px;"/>
+</body>
+</html>

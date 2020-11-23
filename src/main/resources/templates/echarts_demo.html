@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>echarts</title>
+    <script type="text/javascript" src="../files/js/echarts.min.js"></script>
+    <script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+    <style>
+        table {
+            cellspacing: 0;
+            *border-collapse: collapse; /* IE7 and lower */
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .bordered tr:hover {
+            background: #fbf8e9;
+            -o-transition: all 0.1s ease-in-out;
+            -webkit-transition: all 0.1s ease-in-out;
+            -moz-transition: all 0.1s ease-in-out;
+            -ms-transition: all 0.1s ease-in-out;
+            transition: all 0.1s ease-in-out;
+        }
+
+        .bordered th {
+            padding: 7px;
+            text-align: center;
+            cellspacing: 0;
+        }
+
+        .bordered td {
+            padding: 7px;
+            text-align: center;
+            cellspacing: 0;
+        }
+
+
+        .bordered th {
+
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+            background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+            background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+            background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+            background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);
+            background-image: linear-gradient(top, #ebf3fc, #dce9f9);
+        }
+
+        .bordered td:first-child, .bordered th:first-child {
+            border-left: none;
+        }
+
+        .bordered tr:nth-of-type(2n) {
+            background: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .bordered tr:nth-of-type(2n+1) {
+            background: #F7FAFC;
+            cursor: pointer;
+        }
+
+        .bordered tbody tr:hover {
+            background: #fbf8e9;
+            -o-transition: all 0.1s ease-in-out;
+            -webkit-transition: all 0.1s ease-in-out;
+            -moz-transition: all 0.1s ease-in-out;
+            -ms-transition: all 0.1s ease-in-out;
+            transition: all 0.1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width:100%;height:650px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main'));
+    let id = [];
+    let bookName = [];
+    let bookPrice = [];
+    //let dataTemp = [];
+    //AJAX接收数据主体
+    $.ajax({
+        type: "GET",
+        url: "/all",
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            for (let i = 0; i < result.length; i++) {
+                id.push(result[i].id);
+                bookName.push(result[i].bookName);
+                bookPrice.push(result[i].bookPrice);
+                //let ob = {bookName: "", bookPrice: ""};
+                //ob.bookName = result[i].bookName;
+                //ob.bookPrice = result[i].bookPrice;
+                //dataTemp.push(ob);
+            }
+        },
+        error: function (errorMsg) {
+            alert("获取后台数据失败！");
+        }
+    });
+
+    // 指定图表的配置项和数据
+    let option = {
+        title: {
+            text: '图书信息趋势图',
+            x: '100',
+            y: '25'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            type: 'scroll',
+            data: ['图书编号', '图书价格'],
+            y: '25'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show: true,                                 //是否显示工具栏组件
+            orient: "horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            itemSize: 15,                                 //工具栏 icon 的大小
+            itemGap: 10,                                  //工具栏 icon 每项之间的间隔
+            showTitle: true,                             //是否在鼠标 hover 的时候显示每个工具 icon 的标题
+            feature: {
+                mark: {                                 // '辅助线开关'
+                    show: true
+                },
+                dataView: {                            //数据视图工具，可以展现当前图表所用的数据，编辑后可以动态更新
+                    show: true,                         //是否显示该工具。
+                    title: "图书信息",
+                    readOnly: false,                    //是否不可编辑（只读）
+                    lang: ['数据视图', '关闭', '刷新'],  //数据视图上有三个话术，默认是['数据视图', '关闭', '刷新']
+                    backgroundColor: "#fff",             //数据视图浮层背景色。
+                    textareaColor: "#fff",               //数据视图浮层文本输入区背景色
+                    textareaBorderColor: "#333",         //数据视图浮层文本输入区边框颜色
+                    textColor: "#000000",                    //文本颜色。
+                    buttonColor: "#c23531",              //按钮颜色。
+                    buttonTextColor: "#fff",             //按钮文本颜色。
+                    optionToContent: function (opt) {
+                        let colName = "序号";
+                        let typeName = "图书名称";
+                        let dataview = opt.toolbox[0].feature.dataView;  //获取dataview
+                        let table = '<div style="position:absolute;top: 5px;left: 0px;right: 0px;line-height: 1.4em;text-align:center;font-size:14px;">' + dataview.title + '</div>'
+                        table += getTable(opt, colName, typeName);
+                        return table;
+                    }
+                },
+                magicType: {                            //动态类型切换
+                    show: true,
+                    title: "切换",                       //各个类型的标题文本，可以分别配置。
+                    type: ['line', 'bar'],              //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+                },
+                restore: {                             //配置项还原。
+                    show: true,                         //是否显示该工具。
+                    title: "还原",
+                },
+                saveAsImage: {                         //保存为图片。
+                    show: true,                         //是否显示该工具。
+                    type: "png",                         //保存的图片格式。支持 'png' 和 'jpeg'。
+                    //name: "pic1",                        //保存的文件名称，默认使用 title.text 作为名称
+                    backgroundColor: "#ffffff",        //保存的图片背景色，默认使用 backgroundColor，如果backgroundColor不存在的话会取白色
+                    title: "保存为图片",
+                    pixelRatio: 1                        //保存图片的分辨率比例，默认跟容器相同大小，如果需要保存更高分辨率的，可以设置为大于 1 的值，例如 2
+                },
+                /*dataZoom: {                             //数据区域缩放。目前只支持直角坐标系的缩放
+                    show: true,                         //是否显示该工具。
+                    title: "缩放",                       //缩放和还原的标题文本
+                    xAxisIndex: 0,                       //指定哪些 xAxis 被控制。如果缺省则控制所有的x轴。如果设置为 false 则不控制任何x轴。如果设置成 3 则控制 axisIndex 为 3 的x轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的x轴
+                    yAxisIndex: false,                   //指定哪些 yAxis 被控制。如果缺省则控制所有的y轴。如果设置为 false 则不控制任何y轴。如果设置成 3 则控制 axisIndex 为 3 的y轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的y轴
+                },*/
+            },
+            zlevel: 0,                                   //所属图形的Canvas分层，zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面
+            z: 2,                                         //所属组件的z分层，z值小的图形会被z值大的图形覆盖
+            left: "auto",                              //组件离容器左侧的距离,'left', 'center', 'right','20%'
+            top: "25px",                                   //组件离容器上侧的距离,'top', 'middle', 'bottom','20%'
+            right: "10%",                               //组件离容器右侧的距离,'20%'
+            bottom: "auto",                              //组件离容器下侧的距离,'20%'
+            width: "auto",                               //图例宽度
+            height: "auto",                              //图例高度
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: bookName,
+                axisLabel: {
+                    interval: 0,
+                    rotate: 40
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '图书编号',
+                type: 'line',
+                data: id,
+                color: 'skyblue',
+                symbolSize: 5
+            },
+            {
+                name: '图书价格',
+                type: 'line',
+                data: bookPrice,
+                color: 'red',
+                symbolSize: 5
+            }
+        ]
+    };
+
+    function getTable(opt, colName, typeName) {
+        let axisData = opt.xAxis[0].data;//获取图形的data数组
+        let series = opt.series;//获取series
+        let num = 0;//记录序号
+        let sum = [];//获取合计数组（根据对应的系数生成相应数量的sum）
+        for (let i = 0; i < series.length; i++) {
+            sum[i] = 0;
+        }
+        let table = '<table class="bordered"><thead><tr>'
+            + '<th>' + colName + '</th>'
+            + '<th>' + typeName + '</th>';
+        for (let i = 0; i < series.length; i++) {
+            table += '<th>' + series[i].name + '</th>'
+        }
+        table += '</tr></thead><tbody>';
+        for (let i = 0, l = axisData.length; i < l; i++) {
+            num += 1;
+            for (let n = 0; n < series.length; n++) {
+                if (series[n].data[i]) {
+                    sum[n] += Number(series[n].data[i]);
+                } else {
+                    sum[n] += Number(0);
+                }
+
+            }
+            table += '<tr>'
+                + '<td>' + num + '</td>'
+                + '<td>' + axisData[i] + '</td>';
+            for (let j = 0; j < series.length; j++) {
+                if (series[j].data[i]) {
+                    table += '<td>' + series[j].data[i] + '</td>';
+                } else {
+                    table += '<td>' + 0 + '</td>';
+                }
+
+            }
+            table += '</tr>';
+        }
+        //最后一行加上合计
+        table += '<tr>' + '<td>' + (num + 1) + '</td>' + '<td>合计</td>';
+        for (let n = 0; n < series.length; n++) {
+            if (String(sum[n]).indexOf(".") > -1)
+                table += '<td>' + (Number(sum[n])).toFixed(2) + '</td>';
+            else
+                table += '<td>' + Number(sum[n]) + '</td>';
+        }
+        table += '</tr></tbody></table>';
+        return table;
+    }
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+</html>

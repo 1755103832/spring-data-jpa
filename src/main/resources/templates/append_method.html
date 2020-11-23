@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>append</title>
+    <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                // 以html创建追加新元素
+                var text1 = "<div>text1</div>";
+                // 以jQuery创建新元素
+                var text2 = $("<div></div>").text("text2");
+                // 以dom创建新元素
+                var text3 = document.createElement("div").innerText = "text3";
+                $("body").append(text1, text2, text3);
+            })
+        })
+    </script>
+</head>
+<body>
+<input type="button" value="append1" id="btn1"/>
+<div>this is text</div>
+</body>
+</html>

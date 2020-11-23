@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sumoselect</title>
+    <link rel="stylesheet" href="../files/css/sumoselect.css"/>
+    <script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../files/js/jquery.sumoselect.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/all",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    $.each(result, function (index, data) {
+                        var varItem = new Option(data["bookName"]);
+                        $("#select1").append(varItem);
+                    });
+                },
+                error: function () {
+                    alert("获取后台数据失败！");
+                }
+            })
+
+            var map = [
+                {"name": "小明", "code": "小明"},
+                {"name": "小红", "code": "小红"},
+                {"name": "张三", "code": "张三"},
+                {"name": "李四", "code": "李四"},
+                {"name": "王五", "code": "王五"},
+                {"name": "老六", "code": "老六"},
+                {"name": "陈八", "code": "陈八"},
+            ];
+
+            $('.selectBox').SumoSelect({
+                searchText: '输入检索......',
+                search: true,
+                csvDispCount: 15,
+                captionFormat: '{0} 项已选择',
+                captionFormatAllSelected: '{0} 项 已全选!',
+                okCancelInMulti: true,
+                selectAll: true,
+                isClickAwayOk: true,
+                placeholder: '请选择',
+                locale: ['确定', '取消', '全选'],
+            });
+
+            /**
+             * 获取list指定列的所有唯一值，返回数组
+             * @param list 对象集合
+             * @param groupKey 需要分组的列
+             * @returns 返回唯一的groupKey列
+             */
+            function getGroupArr(list, groupKey) {
+                var resultList = [];
+                list.forEach(function (index, data) {
+                    var val1 = data[groupKey];
+                    if (resultList.indexOf(val1) < 0)
+                        resultList.push(val1)
+                })
+                return resultList;
+            }
+
+        })
+    </script>
+</head>
+<body>
+<select id="select1" class="selectBox" multiple="multiple">
+
+</select>
+</body>
+</html>

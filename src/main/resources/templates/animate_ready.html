@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>animate</title>
+    <script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('div').click(function () {
+                var div = $('div');
+                div.animate({left: '100px'}, 'slow');
+                div.animate({fontSize: '3em'}, 'slow');
+            })
+        })
+    </script>
+</head>
+<body>
+<input type="button" value="开始动画" class="btn"/>
+<div style="background: aqua;height: 100px;width: 200px;position: absolute;">fuzzface</div>
+</body>
+</html>

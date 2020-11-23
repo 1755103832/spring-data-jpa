@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                $("#div1").remove();
+            })
+            $("#btn2").click(function () {
+                $("#div1").empty();
+            })
+            $("#btn3").click(function () {
+                $("ins").remove(".italic");
+            })
+        })
+    </script>
+</head>
+<body>
+<button id="btn1">remove</button>
+<button id="btn2">empty</button>
+<button id="btn3">指定删除</button>
+<div id="div1" style="height: 100px; width: 300px;border: 1px solid skyblue;background-color: yellow;">
+    <a>I</a>
+    <ins>am</ins>
+    <ins class="italic">your</ins>
+    <strong>father</strong>
+</div>
+</body>
+</html>

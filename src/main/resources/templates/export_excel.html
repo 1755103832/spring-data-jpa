@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>export</title>
+    <!--<script type="text/javascript" src="../static/js/demo.page.js"></script>-->
+    <script type="text/javascript" src="../static/js/excel-gen.js"></script>
+    <script type="text/javascript" src="../static/js/FileSaver.js"></script>
+    <script type="text/javascript" src="../static/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+
+        function books() {
+            $.ajax({
+                url: '/all',
+                dataType: 'json',
+                type: 'get',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            excel = new ExcelGen({
+                "src_id": "test_table",
+                "show_header": true
+            });
+            $("#generate-excel").click(function () {
+                excel.generate();
+            });
+        });
+    </script>
+</head>
+<body>
+<table class="table table-bordered table-hover definewidth m10" id="test_table"></table>
+<!--id在table中写-->
+<!--调用方法名在button写-->
+<button type="button" class="btn btn-success" id="generate-excel" onclick="books()">导出Excel</button>
+</body>
+</html>
