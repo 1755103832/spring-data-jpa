@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue_table_data</title>
+    <link type="text/css" rel="stylesheet" href="../files/elementui/css/index.css"/>
+</head>
+<body>
+<div id="bookData">
+    <el-table :data="bookData" style="width: 80%;margin-left: 10%;">
+        <el-table-column prop="id" label="图书编号"></el-table-column>
+        <el-table-column prop="bookName" label="图书名称"></el-table-column>
+        <el-table-column prop="bookPrice" label="图书价格"></el-table-column>
+    </el-table>
+</div>
+</body>
+<script type="text/javascript" src="../files/elementui/js/vue.js"></script>
+<script type="text/javascript" src="../files/elementui/js/index.js"></script>
+<script type="text/javascript" src="../files/elementui/js/axios.min.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#bookData',
+        data: {
+            bookData: []
+        },
+        mounted() {
+            this.getTableInfo();
+        },
+        methods: {
+            getTableInfo() {
+                let self = this;
+                axios.get('/all2').then(function (response) {
+                    self.bookData = response.data.bookList;
+                    console.log(response);
+                }).catch(function (response) {
+                    console.log(response);
+                })
+            }
+        }
+    })
+</script>
+</html>
