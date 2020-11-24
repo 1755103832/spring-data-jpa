@@ -24,21 +24,6 @@
 <body>
 <div id="bookData">
     <el-table :data="bookData" border style="width: 80%;margin-left: 10%;" :summary-method="getSummaries" show-summary>
-        <!--<el-table-column type="expand">
-            <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="图书编号">
-                        <span>{{ props.row.id }}</span>
-                    </el-form-item>
-                    <el-form-item label="图书名称">
-                        <span>{{ props.row.bookName }}</span>
-                    </el-form-item>
-                    <el-form-item label="图书价格">
-                        <span>{{ props.row.bookPrice }}</span>
-                    </el-form-item>
-                </el-form>
-            </template>
-        </el-table-column>-->
         <el-table-column prop="id" label="图书编号"></el-table-column>
         <el-table-column prop="bookName" label="图书名称">
             <template slot-scope="scope">
@@ -53,17 +38,6 @@
         </el-table-column>
         <el-table-column prop="bookPrice" label="图书价格"></el-table-column>
     </el-table>
-    <div class="block">
-        <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="1"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="100">
-        </el-pagination>
-    </div>
 </div>
 </body>
 <script type="text/javascript" src="../files/elementui/js/vue.js"></script>
@@ -79,12 +53,6 @@
             this.getTableInfo();
         },
         methods: {
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
             getTableInfo() {
                 let self = this;
                 axios.get('/all2').then(function (response) {
