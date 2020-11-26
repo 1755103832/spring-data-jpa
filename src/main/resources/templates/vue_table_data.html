@@ -3,48 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>vue_table_data</title>
-    <link type="text/css" rel="stylesheet" href="../files/elementui2.14.1/lib/theme-chalk/index.css"/>
-    <style type="text/css">
-        .demo-table-expand {
-            font-size: 0;
-        }
-
-        .demo-table-expand label {
-            width: 90px;
-            color: #99a9bf;
-        }
-
-        .demo-table-expand .el-form-item {
-            margin-right: 0;
-            margin-bottom: 0;
-            width: 50%;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="../files/elementui2141/lib/theme-chalk/index.css"/>
 </head>
 <body>
 <div id="bookData">
-    <el-button type="primary">导出Excel<i class="el-icon-upload el-icon--right"></i></el-button>
-    <el-table :data="bookData" border style="width: 80%;margin-left: 10%;" :summary-method="getSummaries" show-summary>
+    <el-button type="primary" @click="exportExcel">导出Excel<i class="el-icon-upload el-icon--right"></i></el-button>
+    <el-table id="excel" :data="bookData" border style="width: 80%;margin-left: 10%;" :summary-method="getSummaries"
+              show-summary>
         <el-table-column prop="id" label="图书编号"></el-table-column>
-        <el-table-column prop="bookName" label="图书名称">
-            <template slot-scope="scope">
-                <el-popover trigger="hover" placement="top">
-                    <p>图书名称: {{ scope.row.bookName }}</p>
-                    <p>图书价格: {{ scope.row.bookPrice }}</p>
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.bookName }}</el-tag>
-                    </div>
-                </el-popover>
-            </template>
-        </el-table-column>
+        <el-table-column prop="bookName" label="图书名称"></el-table-column>
         <el-table-column prop="bookPrice" label="图书价格"></el-table-column>
     </el-table>
 </div>
 </body>
-<script type="text/javascript" src="../files/elementui/js/vue.js"></script>
-<script type="text/javascript" src="../files/elementui2.14.1/lib/index.js"></script>
-<script type="text/javascript" src="../files/elementui/js/axios.min.js"></script>
+<script type="text/javascript" src="../files/js/vue.min.js"></script>
+<script type="text/javascript" src="../files/elementui2141/lib/index.js"></script>
+<script type="text/javascript" src="../files/elementui2141/lib/axios/axios.min.js"></script>
 <script type="text/javascript" src="../files/js/FileSaver.js"></script>
+<script type="text/javascript" src="../files/elementui2141/lib/xlsx/xlsx.js"></script>
 <script type="text/javascript">
     new Vue({
         el: '#bookData',
@@ -91,31 +67,18 @@
                 });
                 return sums;
             },
-            // //定义导出Excel表格事件
-            // exportExcel() {
-            //     /* 从表生成工作簿对象 */
-            //     let wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-            //     /* 获取二进制字符串作为输出 */
-            //     var wbout = XLSX.write(wb, {
-            //         bookType: 'xlsx',
-            //         bookSST: true,
-            //         type: 'array'
-            //     })
-            //     try {
-            //         FileSaver.saveAs(
-            //             //Blob 对象表示一个不可变、原始数据的类文件对象。
-            //             //Blob 表示的不一定是JavaScript原生格式的数据。
-            //             //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
-            //             //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
-            //             new Blob([wbout], {type: 'application/octet-stream'}),
-            //             //设置导出文件名称
-            //             'sheetjs.xlsx'
-            //         )
-            //     } catch (e) {
-            //         if (typeof console !== 'undefined') console.log(e, wbout)
-            //     }
-            //     return wbout
-            // }
+            exportExcel() {
+                /* generate workbook object from table */
+                var wb = XLSX.utils.table_to_book(document.querySelector('#excel'))
+                /* get binary string as output */
+                var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'})
+                try {
+                    FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), 'test.xlsx')
+                } catch (e) {
+                    if (typeof console !== 'undefined') console.log(e, wbout)
+                }
+                return wbout
+            }
         }
     })
 </script>
