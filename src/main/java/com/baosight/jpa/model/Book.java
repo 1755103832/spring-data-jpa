@@ -4,10 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "book")
@@ -17,7 +14,10 @@ import javax.persistence.Table;
 @SuppressWarnings("all")
 public class Book {
 
+    // 主键
     @Id
+    // 自增长
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
