@@ -25,4 +25,7 @@ public class BookService {
         return null;
     }
 
+    public List<Book> invokeProcedure(String bookName) {
+        return bookMapper.invokeProcedure(bookName);
+    }
 }

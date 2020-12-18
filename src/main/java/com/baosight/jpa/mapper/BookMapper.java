@@ -3,10 +3,12 @@ package com.baosight.jpa.mapper;
 import com.baosight.jpa.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 @SuppressWarnings("all")
+//@Repository
 public interface BookMapper extends JpaRepository<Book, Long> {
 
     /**
@@ -19,4 +21,7 @@ public interface BookMapper extends JpaRepository<Book, Long> {
     @Query(value = "select id, book_name, book_price from book where book_name like concat('%',?,'%')", nativeQuery = true)
     List<Book> findByBookName(String bookName);
 
+    //@Procedure(name = "p_database01_book")
+    @Query(value = "call database01.p_database01_book(concat('%',:bookName,'%'))", nativeQuery = true)
+    List<Book> invokeProcedure(@Param("bookName") String bookName);
 }

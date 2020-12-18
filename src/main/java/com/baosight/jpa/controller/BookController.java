@@ -47,4 +47,10 @@ public class BookController {
         }
         return map;
     }
+
+    @PostMapping("/all4")
+    @ApiOperation(value = "测试springdatajpa调用存储过程")
+    public List<Book> query4(String bookName) {
+        return bookService.invokeProcedure(bookName);
+    }
 }

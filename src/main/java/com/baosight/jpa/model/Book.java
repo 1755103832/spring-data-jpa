@@ -5,14 +5,16 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "book")
 @Data
 @EqualsAndHashCode
 @Accessors(chain = true)
+//@NamedStoredProcedureQuery(name = "p_database01_book", procedureName = "p_database01_book")
 @SuppressWarnings("all")
-public class Book {
+public class Book implements Serializable {
 
     // 主键
     @Id
