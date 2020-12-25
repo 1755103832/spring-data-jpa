@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jquery1</title>
+    <style type="text/css">
+        #bottom-panel {
+            width: 300px;
+            height: 300px;
+            border: 1px dashed skyblue;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="bottom-panel">
+    test
+</div>
+</body>
+<script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#bottom-panel').hover(function () {
+            $(this).css('background', 'yellow');
+        }, function () {
+            $(this).css('background', 'white');
+        })
+    })
+</script>
+</html>
