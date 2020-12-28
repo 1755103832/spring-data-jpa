@@ -9,28 +9,33 @@
 </body>
 <script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="../files/layer-v3.1.1/layer/layer.js"></script>
-<script type="text/javascript" src="../files/elementui2141/lib/axios/axios.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        layer.open({
-            type: 0, //Page层类型
-            area: ['500px', '300px'],
-            title: 'tips',
-            shade: 0.01, //遮罩透明度
-            maxmin: true, //允许全屏最小化
-            anim: 1, //0-6的动画形式，-1不开启
-            content: 'list',
-            end: function () {
-                layer.msg('你关不掉我的!!!');
+        // layer.open({
+        //     type: 0, //Page层类型
+        //     area: ['500px', '300px'],
+        //     title: 'tips',
+        //     shade: 0.01, //遮罩透明度
+        //     maxmin: true, //允许全屏最小化
+        //     anim: 1, //0-6的动画形式，-1不开启
+        //     content: 'list',
+        //     end: function () {
+        //         layer.msg('你关不掉我的!!!');
+        //     }
+        // })
+
+        //信息框-例2
+        layer.msg('你确定你很帅么？', {
+            time: 0, //不自动关闭
+            btn: ['必须啊', '丑到爆'],
+            yes: function (index) {
+                layer.close(index);
+                layer.msg('雅蠛蝶 O.o', {
+                    icon: 6,
+                    btn: ['嗷', '啊', '嗯']
+                })
             }
-        })
-        //axios_fn();
+        });
     })
-    let axios_fn = function () {
-        axios.get('/all2').then(function (response) {
-            let list = response.data.bookList;
-            console.log(list);
-        })
-    }
 </script>
 </html>
