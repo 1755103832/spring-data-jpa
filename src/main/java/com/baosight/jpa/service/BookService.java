@@ -28,4 +28,14 @@ public class BookService {
     public List<Book> invokeProcedure(String bookName) {
         return bookMapper.invokeProcedure(bookName);
     }
+
+    public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        //移位添加注释,提高性能
+//        int num = 8 >> 2;//除4
+//        int num = 8 / 4;
+        int num = 2 << 3;//乘8
+        long endTime = System.currentTimeMillis();
+        System.out.println("程序运行时间-->" + (endTime - startTime) + "ms" + num);
+    }
 }
