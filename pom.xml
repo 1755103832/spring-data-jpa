@@ -178,5 +178,11 @@
             <artifactId>nacos-discovery-spring-boot-starter</artifactId>
             <version>0.2.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

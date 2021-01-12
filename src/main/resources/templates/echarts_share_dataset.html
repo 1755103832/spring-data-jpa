@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>share_dataset</title>
+    <style type="text/css">
+        #box {
+            margin: auto;
+            width: 80%;
+            height: 768px;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+</body>
+<script type="text/javascript" src="../files/js/echarts.min.js"></script>
+<script type="text/javascript" src="../files/js/axios.min.js"></script>
+<script type="text/javascript">
+    !function () {
+        let data = ['1', '2', '3'];
+        let array = ['3', '4', '5'];
+        data = data.map((key, value) => [key, array[value]]);
+        //console.log(data);
+        let arr1 = ['product'];
+        let arr2 = ['Matcha Latte'];
+        let arr3 = ['Milk Tea'];
+        let arr4 = ['Cheese Cocoa'];
+        let arr5 = ['Walnut Brownie'];
+        axios.get('http://localhost:8081/productId').then(function (response) {
+            let productId = response.data;
+            //let newArr1 = arr1.concat(productId);
+            for (let i = 0; i < productId.length; i++) {
+                arr1.push(productId[i]);
+            }
+        })
+        axios.get('http://localhost:8081/matchaLatte').then(function (response) {
+            let matchaLatte = response.data;
+            //let newArr2 = arr2.concat(matchaLatte);
+            for (let i = 0; i < matchaLatte.length; i++) {
+                arr2.push(matchaLatte[i]);
+            }
+        })
+        axios.get('http://localhost:8081/milkTea').then(function (response) {
+            let milkTea = response.data;
+            //let newArr3 = arr3.concat(milkTea);
+            for (let i = 0; i < milkTea.length; i++) {
+                arr3.push(milkTea[i]);
+            }
+        })
+        axios.get('http://localhost:8081/cheeseCocoa').then(function (response) {
+            let cheeseCocoa = response.data;
+            //let newArr4 = arr4.concat(cheeseCocoa);
+            for (let i = 0; i < cheeseCocoa.length; i++) {
+                arr4.push(cheeseCocoa[i]);
+            }
+        })
+        axios.get('http://localhost:8081/walnutBrownie').then(function (response) {
+            let walnutBrownie = response.data;
+            //let newArr5 = arr5.concat(walnutBrownie);
+            for (let i = 0; i < walnutBrownie.length; i++) {
+                arr5.push(walnutBrownie[i]);
+            }
+        })
+        console.log(arr1);
+        // let obj1 = "";
+        // let stringify = obj1.stringify(arr1);
+        // console.log(stringify);
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('box'));
+        let option;
+        setTimeout(function () {
+            option = {
+                legend: {},
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: false
+                },
+                dataset: {
+                    source: [
+                        ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+                        ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
+                        ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
+                        ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
+                        ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1]
+                    ]
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    gridIndex: 0
+                },
+                grid: {
+                    top: '55%'
+                },
+                series: [
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row'
+                    },
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row'
+                    },
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row'
+                    },
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row'
+                    },
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '30%',
+                        center: ['50%', '25%'],
+                        label: {
+                            formatter: '{b}: {@2012} ({d}%)'
+                        },
+                        encode: {
+                            itemName: 'product',
+                            value: '2012',
+                            tooltip: '2012'
+                        }
+                    }
+                ]
+            };
+
+            myChart.on('updateAxisPointer', function (event) {
+                let xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) {
+                    let dimension = xAxisInfo.value + 1;
+                    myChart.setOption({
+                        series: {
+                            id: 'pie',
+                            label: {
+                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                            },
+                            encode: {
+                                value: dimension,
+                                tooltip: dimension
+                            }
+                        }
+                    });
+                }
+            });
+            myChart.setOption(option);
+        });
+    }()
+</script>
+</html>
