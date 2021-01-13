@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>echarts_book_pie</title>
+    <link rel="shortcut icon" type="images/x-icon" href="http://www.jd.com/favicon.ico">
+    <style type="text/css">
+        #box {
+            margin: auto;
+            width: 80%;
+            height: 768px;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+</body>
+<script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../files/js/echarts.min.js"></script>
+<script type="text/javascript" src="../files/js/axios.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        initData();
+    })
+
+    function initData() {
+        axios.get('http://localhost:8081/all').then(function (response) {
+            let data = response.data;
+            pieEchart(data);
+        }).catch(function (errorMsg) {
+            console.log(errorMsg);
+        })
+    }
+
+    function pieEchart(data) {
+        let myChart = echarts.init(document.getElementById('box'));
+        let option = {
+            title: {
+                text: '图书信息价格统计',
+                subtext: '内部事项 注意保密',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/><span style="display: inline-block;' +
+                    'margin-right: 5px; border-radius: 10px;' +
+                    'width: 10px; height: 10px; background: #00F7DE"></span>{b}: {c}RMB ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: (function () {
+                    let res = [];
+                    for (let i = 0; i < data.length; i++) {
+                        res.push({
+                            name: data[i].bookName
+                        });
+                    }
+                    return res;
+                })()
+            },
+            series: [
+                {
+                    name: '图书名称',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: (function () {
+                        let res = [];
+                        for (let i = 0; i < data.length; i++) {
+                            res.push({
+                                name: data[i].bookName,
+                                value: data[i].bookPrice
+                            });
+                        }
+                        return res;
+                    })()
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+</html>
