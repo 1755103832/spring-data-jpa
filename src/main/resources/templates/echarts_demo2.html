@@ -19,6 +19,105 @@
 <script type="text/javascript" src="../files/js/echarts.min.js"></script>
 <script type="text/javascript" src="../files/js/axios.min.js"></script>
 <script type="text/javascript">
-
+    $(document).ready(function () {
+        initData();
+    })
+    let initData = function () {
+        let arr1 = ['product'];
+        let arr2 = ['Matcha Latte'];
+        let arr3 = ['Milk Tea'];
+        let arr4 = ['Cheese Cocoa'];
+        let arr5 = ['Walnut Brownie'];
+        axios.all([
+            axios.get('http://localhost:8081/productId'),
+            axios.get('http://localhost:8081/matchaLatte'),
+            axios.get('http://localhost:8081/milkTea'),
+            axios.get('http://localhost:8081/cheeseCocoa'),
+            axios.get('http://localhost:8081/walnutBrownie')
+        ]).then(axios.spread(function (data1, data2, data3, data4, data5) {
+            let productId = data1.data;
+            for (let i = 0; i < productId.length; i++) {
+                arr1.push(productId[i]);
+            }
+            let matchaLatte = data2.data;
+            for (let i = 0; i < matchaLatte.length; i++) {
+                arr2.push(matchaLatte[i]);
+            }
+            let milkTea = data3.data;
+            for (let i = 0; i < milkTea.length; i++) {
+                arr3.push(milkTea[i]);
+            }
+            let cheeseCocoa = data4.data;
+            for (let i = 0; i < cheeseCocoa.length; i++) {
+                arr4.push(cheeseCocoa[i]);
+            }
+            let walnutBrownie = data5.data;
+            for (let i = 0; i < walnutBrownie.length; i++) {
+                arr5.push(walnutBrownie[i]);
+            }
+            let all = [arr1, arr2, arr3, arr4, arr5];
+            console.log(all);
+            initEcharts(all);
+        })).catch(errors => {
+            console.log(errors);
+        })
+    }
+    let initEcharts = function (all) {
+        let myChart = echarts.init(document.getElementById('box'));
+        setTimeout(function () {
+            let option = {
+                legend: {},
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: false
+                },
+                dataset: {
+                    source: all
+                },
+                xAxis: {type: 'category'},
+                yAxis: {gridIndex: 0},
+                grid: {top: '55%'},
+                series: [
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '30%',
+                        center: ['50%', '25%'],
+                        label: {
+                            formatter: '{b}: {@2012} ({d}%)'
+                        },
+                        encode: {
+                            itemName: 'product',
+                            value: '2012',
+                            tooltip: '2012'
+                        }
+                    }
+                ]
+            };
+            myChart.on('updateAxisPointer', function (event) {
+                let xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) {
+                    let dimension = xAxisInfo.value + 1;
+                    myChart.setOption({
+                        series: {
+                            id: 'pie',
+                            label: {
+                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                            },
+                            encode: {
+                                value: dimension,
+                                tooltip: dimension
+                            }
+                        }
+                    });
+                }
+            });
+            myChart.setOption(option);
+        });
+    }
 </script>
 </html>
