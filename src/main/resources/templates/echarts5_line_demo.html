@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>line</title>
+    <link rel="shortcut icon" type="images/x-icon" href="http://www.jd.com/favicon.ico">
+    <style type="text/css">
+        #box {
+            margin: auto;
+            width: 80%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+</body>
+<script type="text/javascript" src="../files/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../files/js/echarts5.min.js"></script>
+<script type="text/javascript" src="../files/js/axios.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initFn();
+    })
+
+    function initFn() {
+        axios.get('http://localhost:8081/all').then(function (response) {
+            let data = response.data;
+            console.log(data);
+            initScatter(data);
+        })
+    }
+
+    function initScatter(data) {
+        let myChart = echarts.init(document.getElementById('box'));
+        let option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [150, 230, 224, 218, 135, 147, 260],
+                type: 'line',
+                smooth: true
+            }]
+        }
+        myChart.setOption(option);
+    }
+</script>
+</html>
